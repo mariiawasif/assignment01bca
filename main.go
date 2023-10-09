@@ -17,6 +17,7 @@ type Blockchain struct {
 	Blocks []*Block
 }
 
+// Adds new block into the blockchain
 func NewBlock(transaction string, nonce int, previousHash string) *Block {
 	block := &Block{
 		Transaction:  transaction,
@@ -27,6 +28,7 @@ func NewBlock(transaction string, nonce int, previousHash string) *Block {
 	return block
 }
 
+// Hash creation
 func (b *Block) CreateHash() string {
 	data := fmt.Sprintf("%s%d%s", b.Transaction, b.Nonce, b.PreviousHash)
 	hash := sha256.Sum256([]byte(data))
@@ -40,8 +42,7 @@ func (bc *Blockchain) AddBlock(transaction string, nonce int) {
 	bc.Blocks = append(bc.Blocks, newBlock)
 }
 
-// DisplayBlocks prints all blocks in the blockchain.
-func (bc *Blockchain) DisplayBlocks() {
+func (bc *Blockchain) DisplayBlocks() { //Function to print all the blocks
 	fmt.Println("----------------- BLOCKCHAIN ---------------------")
 	for i, block := range bc.Blocks {
 		fmt.Printf("Block #%d\n", i+1)
@@ -63,7 +64,7 @@ func (bc *Blockchain) VerifyChain() bool {
 		currentBlock := bc.Blocks[i]
 		previousBlock := bc.Blocks[i-1]
 
-		// Verify that the current block's previous hash matches the hash of the previous block.
+		//Condition to verify if the current block's previous hash matches the hash of previous block
 		if currentBlock.PreviousHash != previousBlock.Hash {
 			return false
 		}
@@ -78,7 +79,7 @@ func main() {
 	genesisBlock := NewBlock("Genesis Transaction", 0, "")
 	blockchain.Blocks = append(blockchain.Blocks, genesisBlock)
 
-	// Add more blocks for demonstration.
+	// Adding more blocks
 	blockchain.AddBlock("Alice to Bob", 12345)
 	blockchain.AddBlock("Bob to Carol", 67890)
 
@@ -94,9 +95,9 @@ func main() {
 
 	isValid := blockchain.VerifyChain()
 	if isValid {
-		fmt.Println("Blockchain is valid.")
+		fmt.Println("Blockchain is valid.") // if there are no changings
 	} else {
-		fmt.Println("Blockchain is invalid.")
+		fmt.Println("Blockchain is invalid.") // if there are changings
 	}
 
 }

@@ -1,3 +1,6 @@
+// Maria Wasif
+// 20i-1872
+// Assignment#01
 package main
 
 import (
@@ -6,6 +9,7 @@ import (
 	"fmt"
 )
 
+// Block
 type Block struct {
 	Transaction  string
 	Nonce        int
@@ -17,7 +21,6 @@ type Blockchain struct {
 	Blocks []*Block
 }
 
-// Adds new block into the blockchain
 func NewBlock(transaction string, nonce int, previousHash string) *Block {
 	block := &Block{
 		Transaction:  transaction,
@@ -28,13 +31,13 @@ func NewBlock(transaction string, nonce int, previousHash string) *Block {
 	return block
 }
 
-// Hash creation
 func (b *Block) CreateHash() string {
 	data := fmt.Sprintf("%s%d%s", b.Transaction, b.Nonce, b.PreviousHash)
 	hash := sha256.Sum256([]byte(data))
 	return hex.EncodeToString(hash[:])
 }
 
+// Adds a new block
 func (bc *Blockchain) AddBlock(transaction string, nonce int) {
 	previousBlock := bc.Blocks[len(bc.Blocks)-1]
 	previousHash := previousBlock.Hash
@@ -54,11 +57,13 @@ func (bc *Blockchain) DisplayBlocks() { //Function to print all the blocks
 	}
 }
 
+// Changes the block's transaction
 func ChangeBlockTransaction(block *Block, newTransaction string) {
 	block.Transaction = newTransaction
 	block.Hash = block.CreateHash()
 }
 
+// Verifying chain
 func (bc *Blockchain) VerifyChain() bool {
 	for i := 1; i < len(bc.Blocks); i++ {
 		currentBlock := bc.Blocks[i]
@@ -79,8 +84,8 @@ func main() {
 	genesisBlock := NewBlock("Genesis Transaction", 0, "")
 	blockchain.Blocks = append(blockchain.Blocks, genesisBlock)
 
-	// Adding more blocks
-	blockchain.AddBlock("Alice to Bob", 12345)
+	//
+	blockchain.AddBlock("Alina to Hadia", 12345)
 	blockchain.AddBlock("Bob to Carol", 67890)
 
 	// Display all blocks in the blockchain.
@@ -95,9 +100,9 @@ func main() {
 
 	isValid := blockchain.VerifyChain()
 	if isValid {
-		fmt.Println("Blockchain is valid.") // if there are no changings
+		fmt.Println("Blockchain is valid.") //checks if block is valid or not
 	} else {
-		fmt.Println("Blockchain is invalid.") // if there are changings
+		fmt.Println("Blockchain is invalid.")
 	}
 
 }
